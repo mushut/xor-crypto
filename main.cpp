@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <iterator>
 
 int main(void)
 {
@@ -21,7 +22,16 @@ int main(void)
 	// Key as at maximum 32-bit value
 	std::cout << "Key (max. 32-bit):" << std::endl;
 	std::cin >> key;
-	unsigned int bitwise_key;
+	unsigned int bitwise_key = 0;
+	std::string::reverse_iterator ptr;
+	int counter = 0;
+	for (ptr = key.rbegin(); ptr < key.rend(); ptr++) {
+		if (*ptr == "1") {
+			bitwise_key |= (1 << counter);
+		}
+ 
+		counter++;
+	}
 
 	// Operation
 	std::ifstream input_file;
