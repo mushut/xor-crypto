@@ -39,7 +39,17 @@ int main(void)
 
 	std::ofstream output_file;
 	output_file.open(output_filename);
+	
 	// Write to file
+	unsigned int tempKey	// Temporary holder for 8 bit part of key
+	char character;
+	char result;
+	while (input_file.get(character)) {
+		result = character ^ tempKey;
+
+		output_file.put(result);
+	}
+
 	output_file.close();
 
 	input_file.close();
