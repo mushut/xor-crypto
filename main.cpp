@@ -20,13 +20,14 @@ int main(void)
 	std::cin >> output_filename;
 	
 	// Key as at maximum 32-bit value
+	// At this moment only use 8-bit values
 	std::cout << "Key (max. 32-bit):" << std::endl;
 	std::cin >> key;
 	unsigned int bitwise_key = 0;
 	std::string::reverse_iterator ptr;
 	int counter = 0;
 	for (ptr = key.rbegin(); ptr < key.rend(); ptr++) {
-		if (*ptr == "1") {
+		if (*ptr == '1') {
 			bitwise_key |= (1 << counter);
 		}
  
@@ -35,13 +36,15 @@ int main(void)
 
 	// Operation
 	std::ifstream input_file;
-	input_file.open(input_filename);
+	input_file.open(input_filename.c_str(), std::ifstream::in);
 
 	std::ofstream output_file;
-	output_file.open(output_filename);
+	output_file.open(output_filename.c_str(), std::ofstream::out | std::ofstream::app);
 	
 	// Write to file
-	unsigned int tempKey	// Temporary holder for 8 bit part of key
+	unsigned int tempKey;	// Temporary holder for 8-bit part of key
+	tempKey = bitwise_key;
+
 	char character;
 	char result;
 	while (input_file.get(character)) {
