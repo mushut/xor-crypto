@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Text used to test program
+*.txt
