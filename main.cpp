@@ -6,6 +6,7 @@
 #include <string>
 #include <fstream>
 #include <iterator>
+#include <vector>
 
 int main(void)
 {
@@ -50,6 +51,13 @@ int main(void)
 
 	if (key_length < 8) {
 		// tempKey must be exactly 8 bits length, so continue bit values from bitwise_key
+		std::vector<unsigned int> tempKeys;
+		int tempKeysLength = key_length;
+		while (tempKeysLength % 8 != 0) {
+			tempKeysLength += key_length;
+		}
+		
+		// Assign valuet to tempKeys so that the key continues throughout the vector
 		// TBD
 	}
 	if (key_length == 8) {
@@ -66,6 +74,7 @@ int main(void)
 	while (input_file.get(character)) {
 		// tempKey must be changed if key_length is not exactly 8 bits long
 		// for every iteration.
+		// TBD
 		result = character ^ tempKey;
 
 		output_file.put(result);
