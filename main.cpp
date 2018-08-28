@@ -51,12 +51,15 @@ int main(void)
 
 	if (key_length < 8) {
 		// tempKey must be exactly 8 bits length, so continue bit values from bitwise_key
+		// Naming is bit unclear. 
 		std::vector<unsigned int> tempKeys;
 		int tempKeysLength = key_length;
+		int i = 1;
 		while (tempKeysLength % 8 != 0) {
 			tempKeysLength += key_length;
+			i++;
 		}
-		
+
 		// Assign valuet to tempKeys so that the key continues throughout the vector
 		// TBD
 	}
@@ -75,7 +78,9 @@ int main(void)
 		// tempKey must be changed if key_length is not exactly 8 bits long
 		// for every iteration.
 		// TBD
-		result = character ^ tempKey;
+		if (key_length == 8) {
+			result = character ^ tempKey;
+		}
 
 		output_file.put(result);
 	}
