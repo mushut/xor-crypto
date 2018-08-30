@@ -60,8 +60,23 @@ int main(void)
 			i++;
 		}
 
+		int bitsInserted = 0;
 		// Assign valuet to tempKeys so that the key continues throughout the vector
-		// TBD
+		for (int j = 0; j < i; j++) {
+			unsigned int element = 0;
+
+			for (int k = 0; k < 8; k++) {
+				int bit = 0;
+
+				int index = bitsInserted % key_length;
+				bit = bit_masks[index] & bitwise_key;
+
+				element = (bit << (7 - k));
+				bitsInserted++;
+			}			
+
+			tempKeys.push_back(element);
+		}
 	}
 	if (key_length == 8) {
 		// tempKey doesn't change during encryption.
