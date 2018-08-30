@@ -45,6 +45,8 @@ int main(void)
 	// Write to file
 	unsigned int tempKey;	// Temporary holder for 8-bit part of key
 	int bit_masks[8];	// Used for creating 8-bit tempKey for encrytpion
+	std::vector<unsigned int> tempKeys;	
+
 	for (int i = 0; i < 8; i++) {
 		bit_masks[i] = (1 << (7 - i));	// Mask variables start from most significant bit
 	}	
@@ -52,7 +54,6 @@ int main(void)
 	if (key_length < 8) {
 		// tempKey must be exactly 8 bits length, so continue bit values from bitwise_key
 		// Naming is bit unclear. 
-		std::vector<unsigned int> tempKeys;
 		int tempKeysLength = key_length;
 		int i = 1;
 		while (tempKeysLength % 8 != 0) {
@@ -89,12 +90,22 @@ int main(void)
 
 	char character;
 	char result;
+	int index = 0;
 	while (input_file.get(character)) {
 		// tempKey must be changed if key_length is not exactly 8 bits long
 		// for every iteration.
 		// TBD
 		if (key_length == 8) {
 			result = character ^ tempKey;
+		}
+		
+		if (key_length > 0 && key_length < 8) {
+			result = character ^ tempKeys[index];
+			index++;
+
+			if (index >= tempKeys.size()) {
+				index = 0;
+			}
 		}
 
 		output_file.put(result);
