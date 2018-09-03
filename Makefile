@@ -1,10 +1,7 @@
 all: xor-test.exe
 
-xor-test.exe: xor-test.o
-	g++ -o xor-test.exe xor-test.o
-
-xor-test.o: main.cpp
-	g++ -c main.cpp
+xor-test.exe:
+	g++ -std=c++11 -g -o xor-test.exe main.cpp
 
 clean:
-	rm xor-test.o xor-test.exe
+	rm xor-test.exe
