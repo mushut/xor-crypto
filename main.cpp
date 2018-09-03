@@ -5,26 +5,38 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <iterator>
 #include <vector>
 
 // Start using classes and functions
-int main(void)
+int main(int argc, char** argv)
 {
 	std::string input_filename;
 	std::string output_filename;
 	std::string key;
 
 	std::cout << "xor-crypto" << std::endl;
-	std::cout << "Input filename:" << std::endl;
-	std::cin >> input_filename;
-	std::cout << "Output filename:" << std::endl;
-	std::cin >> output_filename;
+
+	// argc and argv should be checked.
+	if (argc == 1) {
+		std::cout << "Input filename:" << std::endl;
+		std::cin >> input_filename;
+		std::cout << "Output filename:" << std::endl;
+		std::cin >> output_filename;
+		
+		// Keys equal or shorter than 8 bits should work
+		std::cout << "Key (max. 32-bit):" << std::endl;
+		std::cin >> key;
+	}
+	else {
+		input_filename = std::string(*(argv + 1));
+		output_filename = std::string(*(argv + 2));
+		std::string temp(*(argv + 3));
+		std::stringstream str(temp);
+		str >> key;
+	}
 	
-	// Key as at maximum 32-bit value
-	// At this moment only use 8-bit values
-	std::cout << "Key (max. 32-bit):" << std::endl;
-	std::cin >> key;
 	unsigned int bitwise_key = 0;
 	std::string::reverse_iterator ptr;
 	int key_length = 0;
