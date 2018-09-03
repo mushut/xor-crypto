@@ -8,6 +8,7 @@
 #include <iterator>
 #include <vector>
 
+// Start using classes and functions
 int main(void)
 {
 	std::string input_filename;
@@ -44,12 +45,12 @@ int main(void)
 	
 	// Write to file
 	unsigned int tempKey;	// Temporary holder for 8-bit part of key
-	int bit_masks[8];	// Used for creating 8-bit tempKey for encrytpion
+	//int bit_masks[8];	// Used for creating 8-bit tempKey for encryption
 	std::vector<unsigned int> tempKeys;	
 
-	for (int i = 0; i < 8; i++) {
-		bit_masks[i] = (1 << (7 - i));	// Mask variables start from most significant bit
-	}	
+	//for (int i = 0; i < 8; i++) {
+	//	bit_masks[i] = (1 << (7 - i));	// Mask variables start from most significant bit
+	//}	
 
 	if (key_length < 8) {
 		// tempKey must be exactly 8 bits length, so continue bit values from bitwise_key
@@ -61,8 +62,15 @@ int main(void)
 			i++;
 		}
 
+		// Generate bit_masks
+		int bit_masks[key_length];
+		for (int i = 0; i < key_length; i++) {
+			bit_masks[i] = (1 << (key_length - 1) - i);
+		}
+
 		int bitsInserted = 0;
 		// Assign valuet to tempKeys so that the key continues throughout the vector
+		// Does not work.
 		for (int j = 0; j < i; j++) {
 			unsigned int element = 0;
 
@@ -70,7 +78,7 @@ int main(void)
 				int bit = 0;
 
 				int index = bitsInserted % key_length;
-				bit = bit_masks[index] & bitwise_key;
+				bit = (bit_masks[index] & bitwise_key) == bit_masks[index];
 
 				element = (bit << (7 - k));
 				bitsInserted++;
