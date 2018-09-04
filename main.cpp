@@ -57,12 +57,7 @@ int main(int argc, char** argv)
 	
 	// Write to file
 	unsigned int tempKey;	// Temporary holder for 8-bit part of key
-	//int bit_masks[8];	// Used for creating 8-bit tempKey for encryption
 	std::vector<unsigned int> tempKeys;	
-
-	//for (int i = 0; i < 8; i++) {
-	//	bit_masks[i] = (1 << (7 - i));	// Mask variables start from most significant bit
-	//}	
 
 	if (key_length < 8) {
 		// tempKey must be exactly 8 bits length, so continue bit values from bitwise_key
@@ -76,13 +71,12 @@ int main(int argc, char** argv)
 
 		// Generate bit_masks
 		int bit_masks[key_length];
-		for (int i = 0; i < key_length; i++) {
-			bit_masks[i] = (1 << (key_length - 1) - i);
+		for (int k = 0; k < key_length; k++) {
+			bit_masks[k] = (1 << (key_length - 1) - k);
 		}
 
 		int bitsInserted = 0;
 		// Assign valuet to tempKeys so that the key continues throughout the vector
-		// Does not work.
 		for (int j = 0; j < i; j++) {
 			unsigned int element = 0;
 
@@ -92,7 +86,7 @@ int main(int argc, char** argv)
 				int index = bitsInserted % key_length;
 				bit = (bit_masks[index] & bitwise_key) == bit_masks[index];
 
-				element = (bit << (7 - k));
+				element += (bit << (7 - k));
 				bitsInserted++;
 			}			
 
@@ -103,9 +97,40 @@ int main(int argc, char** argv)
 		// tempKey doesn't change during encryption.
 		tempKey = bitwise_key;
 	}
+
+	// Maximum is 32 bits
 	if (key_length > 8) {
 		// tempKey must be exactly 8 bits length, so continue bit values from bitwise_key
-		// TBD
+		int tempKeysLength = key_length;
+		int i = 1;
+		while (tempKeysLength % 8 != 0) {
+			tempKeysLength += key_length;
+			i++;
+		}
+
+		// Maybe a common function for keys != 8 bits?
+		int bit_masks[key_length];
+		for (int k = 0; k < key_length; k++) {
+			bit_masks[k] = (1 << (key_length - 1) - k);
+		}
+
+		int bitsInserted = 0;
+		for (int j = 0; j < i; j++) {
+			unsigned int element = 0;
+
+			for (int l = 0; l < 8; l++) {
+				int bit = 0;
+
+				int index = bitsInserted % key_length;
+				bit = (bit_masks[index] & bitwise_key) == bit_masks[index];
+
+				element += (bit << (7 - l));
+				bitsInserted++;
+			}
+
+			tempKeys.push_back(element);
+		}
+		int temp = 0;
 	}
 
 	char character;
@@ -114,12 +139,20 @@ int main(int argc, char** argv)
 	while (input_file.get(character)) {
 		// tempKey must be changed if key_length is not exactly 8 bits long
 		// for every iteration.
-		// TBD
 		if (key_length == 8) {
 			result = character ^ tempKey;
 		}
 		
 		if (key_length > 0 && key_length < 8) {
+			result = character ^ tempKeys[index];
+			index++;
+
+			if (index >= tempKeys.size()) {
+				index = 0;
+			}
+		}
+
+		if (key_length > 8 && key_length <= 32) {
 			result = character ^ tempKeys[index];
 			index++;
 
